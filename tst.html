@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prometeus | Consultoria Jurídica Global</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --bg-card: #0a0a0c;
+            --primary: #c5a368;
+            --primary-hover: #d4b57e;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --border: rgba(197, 163, 104, 0.2);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            opacity: 0;
+        }
+
+        body.loaded {
+            opacity: 1;
+            transition: opacity 1.2s ease;
+        }
+
+        h1, h2, h3, h4, .logo, .btn, .nav-links a {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* --- Loader --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        #loader .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            letter-spacing: 0.8em;
+            color: var(--primary);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: loaderFade 2s ease forwards;
+        }
+
+        @keyframes loaderFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            50% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* --- Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 24px 0;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 16px 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { font-size: 18px; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { 
+            color: var(--text-muted); 
+            text-decoration: none; 
+            font-size: 11px; 
+            transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+        .nav-links a:hover { color: var(--text-main); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* --- Hero --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            opacity: 0.4;
+            background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80') center/cover;
+            transform: scale(1.1);
+            transition: transform 10s ease-out;
+        }
+
+        .hero.active .hero-bg { transform: scale(1); }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 7vw, 72px);
+            line-height: 1.1;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: var(--transition);
+            transition-delay: 0.5s;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+            transition-delay: 0.7s;
+        }
+
+        .hero .btn {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.9s;
+        }
+
+        .hero.active h1, .hero.active p, .hero.active .btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--primary);
+            color: #000;
+            padding: 18px 40px;
+            font-size: 11px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid var(--primary);
+        }
+
+        .btn:hover { 
+            background: transparent; 
+            color: var(--primary); 
+            transform: translateX(10px);
+        }
+
+        /* --- Scroll Reveals --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: var(--transition);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: var(--transition);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* --- Sections --- */
+        .section {
+            padding: 120px 0;
+        }
+
+        .section-header { margin-bottom: 80px; }
+        .section-header span { 
+            color: var(--primary); 
+            font-size: 11px; 
+            letter-spacing: 0.4em; 
+            display: block; 
+            margin-bottom: 15px; 
+        }
+        .section-header h2 { font-size: 36px; max-width: 800px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        .card {
+            background: var(--bg-dark);
+            padding: 60px 40px;
+            transition: var(--transition);
+        }
+
+        .card:hover { 
+            background: var(--bg-card);
+        }
+
+        .card h3 { font-size: 18px; margin-bottom: 20px; color: var(--primary); }
+        .card p { color: var(--text-muted); font-size: 14px; font-weight: 300; }
+
+        /* --- Stats --- */
+        .stats { 
+            background: #050505; 
+            padding: 80px 0; 
+            border-top: 1px solid var(--border); 
+            border-bottom: 1px solid var(--border); 
+        }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; text-align: center; }
+        .stat-item h3 { font-size: 48px; color: var(--primary); margin-bottom: 5px; font-weight: 200; }
+        .stat-item p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.2em; }
+
+        /* --- Global Hubs --- */
+        .office-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .office-row:hover {
+            padding-left: 20px;
+            color: var(--primary);
+        }
+        .office-city { font-size: 24px; font-weight: 200; font-family: 'Montserrat'; }
+        .office-addr { color: var(--text-muted); font-size: 12px; font-weight: 300; }
+
+        /* --- Footer --- */
+        footer { padding: 120px 0 40px; background: #000; border-top: 1px solid var(--border); }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 100px; margin-bottom: 100px; }
+        .footer-logo { font-size: 20px; color: var(--primary); margin-bottom: 30px; display: block; }
+        .footer-links h4 { color: #fff; font-size: 11px; margin-bottom: 30px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 12px; line-height: 2.5; transition: 0.3s; font-weight: 300; }
+        .footer-links a:hover { color: var(--primary); }
+
+        .copyright { 
+            display: flex; 
+            justify-content: space-between; 
+            padding-top: 60px; 
+            border-top: 1px solid rgba(255,255,255,0.05); 
+            font-size: 10px; 
+            color: #333;
+            letter-spacing: 0.1em;
+        }
+
+        /* --- Mobile --- */
+        .mobile-toggle { display: none; cursor: pointer; color: var(--primary); font-size: 24px; z-index: 1001; }
+
+        @media (max-width: 1024px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 60px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-toggle { display: block; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .section { padding: 80px 0; }
+            .container { padding: 0 30px; }
+            .hero h1 { font-size: 40px; }
+            .office-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="logo-text">PROMETEUS STRATEGIC</div>
+    </div>
+
+    <header id="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="#" class="logo"><i data-lucide="shield" size="18"></i> PROMETEUS</a>
+                <ul class="nav-links">
+                    <li><a href="#about">Filosofia</a></li>
+                    <li><a href="#sectors">Sectors</a></li>
+                    <li><a href="#hubs">Hubs</a></li>
+                    <li><a href="#contact">Consulta</a></li>
+                </ul>
+                <div class="mobile-toggle"><i data-lucide="menu"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-bg"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <span class="hero-tag">A Autoridade Definitiva</span>
+                    <h1>ARQUITETURA DE DEFESA PARA O PODER GLOBAL.</h1>
+                    <p>Consultoria jurídica estratégica para decisões de alto impacto em ambientes de extrema complexidade.</p>
+                    <a href="#contact" class="btn">SOLICITAR BRIEFING <i data-lucide="arrow-right" size="14"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span>A Filosofia</span>
+                    <h2>Estratégia Superior. Resultados Incontestáveis.</h2>
+                </div>
+                <div class="reveal-left">
+                    <p style="font-size: 20px; font-weight: 200; color: var(--text-muted); max-width: 850px; margin-bottom: 40px;">Na Prometeus, construímos soberania jurídica. Atuamos na interseção entre o Direito e a Geopolítica, fornecendo a estrutura necessária para operar com total blindagem em qualquer mercado.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="sectors" class="section" style="background: #000;">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span>Setores Críticos</span>
+                    <h2>Domínio em Ecossistemas de Alto Risco</h2>
+                </div>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3>Energia & Infraestrutura</h3>
+                        <p>Estratégias para transição energética e projetos de larga escala em jurisdições complexas.</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3>Soberania Digital</h3>
+                        <p>Defesa de infraestrutura crítica, ativos digitais e inteligência artificial perante reguladores globais.</p>
+                    </div>
+                    <div class="card reveal">
+                        <h3>Capital Estratégico</h3>
+                        <p>Estruturação de investimentos transfronteiriços com otimização avançada de risco soberano.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item reveal">
+                        <h3 class="counter" data-target="20">0</h3>
+                        <p>B Protegidos</p>
+                    </div>
+                    <div class="stat-item reveal">
+                        <h3 class="counter" data-target="150">0</h3>
+                        <p>Casos Globais</p>
+                    </div>
+                    <div class="stat-item reveal">
+                        <h3 class="counter" data-target="30">0</h3>
+                        <p>Países Hub</p>
+                    </div>
+                    <div class="stat-item reveal">
+                        <h3 class="counter" data-target="100">0</h3>
+                        <p>Sigilo Total %</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="hubs" class="section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span>Rede Global</span>
+                    <h2>Presença Direta nos Centros de Poder</h2>
+                </div>
+                <div class="offices-list">
+                    <div class="office-row reveal">
+                        <span class="office-city">SÃO PAULO</span>
+                        <span class="office-addr">Faria Lima • Distrito Financeiro</span>
+                    </div>
+                    <div class="office-row reveal">
+                        <span class="office-city">LONDRES</span>
+                        <span class="office-addr">The Shard • London Bridge</span>
+                    </div>
+                    <div class="office-row reveal">
+                        <span class="office-city">NOVA YORK</span>
+                        <span class="office-addr">One World Trade Center • Wall St</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section" style="background: #000;">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span>Consulta</span>
+                    <h2>Protocolo de Engajamento</h2>
+                </div>
+                <div class="reveal" style="max-width: 650px;">
+                    <p style="color: var(--text-muted); margin-bottom: 40px; font-weight: 300;">Mantemos confidencialidade absoluta. Nossa equipe de resposta estratégica entrará em contato via canal seguro em até 4 horas.</p>
+                    <a href="mailto:office@prometeus.law" class="btn">INICIAR BRIEFING SEGURO <i data-lucide="lock" size="14"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <span class="footer-logo">PROMETEUS</span>
+                    <p style="font-size: 11px; color: #444; line-height: 2;">Prometeus Strategic Law LLP. Atendimento exclusivo sob recomendação direta. Arquitetura jurídica de precisão.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="#about">Filosofia</a></li>
+                        <li><a href="#sectors">Sectors</a></li>
+                        <li><a href="#hubs">Hubs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Institucional</h4>
+                    <ul>
+                        <li><a href="#">Privacidade</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                        <li><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <span>© 2026 PROMETEUS LAW. TODOS OS DIREITOS RESERVADOS.</span>
+                <span>GLOBAL AUTHORITY STANDARDS</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Loader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.transform = 'translateY(-100%)';
+                document.body.classList.add('loaded');
+                document.querySelector('.hero').classList.add('active');
+            }, 1800);
+        });
+
+        // Header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (header) {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            }
+        });
+
+        // Reveal Observer
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.observe(el));
+
+        // Counter
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = parseInt(counter.getAttribute('data-target'));
+                    let current = 0;
+                    const update = () => {
+                        current += target / 60;
+                        if (current < target) {
+                            counter.innerText = Math.floor(current);
+                            requestAnimationFrame(update);
+                        } else {
+                            counter.innerText = target + (target > 50 ? '+' : 'B+');
+                        }
+                    };
+                    update();
+                    counterObserver.unobserve(counter);
+                }
+            });
+        });
+
+        document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+    </script>
+</body>
+</html>
