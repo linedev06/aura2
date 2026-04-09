@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PRATU – Plataforma Alimentar Personalizada</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g9:#1b4d1e;--g7:#2d7a32;--g5:#3d9142;--g3:#7ec487;--g2:#b8deba;--g1:#ddf0df;--g0:#eef7ee;
+  --y4:#c8980f;--y1:#faf0c0;--y0:#fdf8e1;
+  --a5:#c8880f;--a1:#fdf0d8;
+  --sage:#f2f7ef;--cream:#faf6e8;
+  --bg:#dde8d8;--by:#e6dbb0;
+  --n9:#1a1a1a;--n7:#3d3d3d;--n4:#8c8c8c;--n2:#e2e8de;--n1:#edf3ea;
+  --wh:#fff;
+  --rl:14px;--rm:10px;--rs:7px;
+  --t:.17s ease;--nav:62px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:#f2f7ef;color:#1a1a1a;min-height:100vh}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:300;height:62px;background:#fff;border-bottom:1px solid #dde8d8;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,5vw,52px)}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:1.3rem;color:#1b4d1e;text-decoration:none;letter-spacing:-.3px;flex-shrink:0;cursor:pointer}
+.logo-mark{width:28px;height:28px;background:#3d9142;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:16px;height:16px}
+.nav-desktop{display:flex;align-items:center;gap:4px}
+.nav-desktop a{font-size:.88rem;font-weight:500;color:#3d3d3d;text-decoration:none;padding:7px 13px;border-radius:7px;transition:background .17s ease,color .17s ease;cursor:pointer}
+.nav-desktop a:hover{background:#eef7ee;color:#2d7a32}
+.nav-sep{width:1px;height:20px;background:#dde8d8;margin:0 6px}
+.nav-user{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;border-radius:40px;border:1px solid #dde8d8;cursor:pointer;transition:background .17s ease}
+.nav-user:hover{background:#eef7ee}
+.nav-av{width:28px;height:28px;border-radius:50%;background:#b8deba;display:flex;align-items:center;justify-content:center}
+.nav-av svg{width:15px;height:15px;fill:#2d7a32}
+.nav-user span{font-size:.83rem;font-weight:600;color:#3d3d3d}
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;width:38px;height:38px;border:1px solid #dde8d8;border-radius:7px;background:#fff;cursor:pointer;gap:5px;transition:background .17s ease}
+.hamburger:hover{background:#eef7ee}
+.hamburger span{display:block;height:1.5px;background:#1a1a1a;border-radius:2px;transition:transform .24s ease,opacity .2s ease,width .2s ease;transform-origin:center}
+.hamburger span:nth-child(1){width:18px}.hamburger span:nth-child(2){width:13px}.hamburger span:nth-child(3){width:18px}
+.hamburger.open span:nth-child(1){width:18px;transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;width:0}
+.hamburger.open span:nth-child(3){width:18px;transform:translateY(-6.5px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:62px;left:0;right:0;z-index:190;background:#fff;border-bottom:1px solid #dde8d8;padding:6px 12px 12px;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.mobile-menu.open{opacity:1;transform:translateY(0);pointer-events:all}
+.mobile-menu a{display:block;font-size:.92rem;font-weight:500;color:#3d3d3d;text-decoration:none;padding:11px 12px;border-radius:7px;transition:background .17s ease}
+.mobile-menu a:hover{background:#eef7ee;color:#2d7a32}
+.mob-footer{display:flex;align-items:center;gap:10px;padding:11px 12px;margin-top:2px;border-top:1px solid #dde8d8}
+.mob-footer span{font-size:.88rem;font-weight:600;color:#3d3d3d}
+
+/* PAGES */
+.page{display:none}.page.active{display:block}
+
+/* HERO */
+.hero{background:linear-gradient(110deg,#eaf5e6 0%,#f5f9e8 55%,#fdf8e1 100%);border-bottom:1px solid #dde8d8;padding:clamp(24px,5vw,52px) clamp(16px,5vw,52px)}
+.hero-inner{max-width:960px;margin:0 auto;display:flex;align-items:flex-start;gap:14px}
+.hero-icon{width:42px;height:42px;background:#eef7ee;border:1px solid #dde8d8;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px}
+.hero-icon svg{width:22px;height:22px;stroke:#2d7a32;fill:none;stroke-width:1.8}
+.hero-copy h1{font-size:clamp(1.35rem,3.5vw,2rem);font-weight:700;color:#1b4d1e;line-height:1.22;margin-bottom:7px;letter-spacing:-.4px}
+.hero-copy p{font-size:clamp(.85rem,1.8vw,.97rem);color:#3d3d3d;line-height:1.6;max-width:520px}
+.hero-copy p strong{color:#2d7a32;font-weight:600}
+
+/* MAIN */
+main{max-width:960px;margin:0 auto;padding:clamp(18px,4vw,36px) clamp(12px,5vw,52px) 0}
+
+/* CARD */
+.card{background:#fff;border:1px solid #dde8d8;border-radius:14px;overflow:hidden}
+.card-header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid #dde8d8;background:#eef7ee}
+.card-hicon{width:30px;height:30px;background:#fdf8e1;border:1px solid #e6dbb0;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.card-hicon svg{width:15px;height:15px;fill:#c8880f}
+.card-header p{font-size:.84rem;font-weight:500;color:#8c8c8c}
+.card-header p strong{color:#1a1a1a;font-weight:700}
+
+/* STUDENT ROW */
+.student-row{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid #dde8d8;transition:background .17s ease}
+.student-row:last-child{border-bottom:none}
+.student-row:hover{background:#eef7ee}
+.s-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:#fff;flex-shrink:0}
+.av-a{background:#4a9e6b}.av-b{background:#c0844a}.av-c{background:#5a82b4}
+.s-info h3{font-size:.93rem;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.s-tag{display:inline-flex;align-items:center;gap:4px;font-size:.73rem;font-weight:500;color:#8c8c8c;background:#eef7ee;border:1px solid #dde8d8;border-radius:20px;padding:2px 8px}
+.s-tag svg{width:9px;height:9px;stroke:#8c8c8c;fill:none;stroke-width:2}
+.s-actions{display:flex;align-items:center;gap:7px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:‘DM Sans’,sans-serif;font-size:.8rem;font-weight:600;border:none;border-radius:7px;padding:8px 13px;cursor:pointer;white-space:nowrap;transition:background .17s ease,color .17s ease,opacity .17s ease}
+.btn:active{opacity:.78}
+.btn svg{width:13px;height:13px;flex-shrink:0}
+.btn-green{background:#3d9142;color:#fff}
+.btn-green:hover{background:#2d7a32}
+.btn-green svg{stroke:white;fill:none;stroke-width:2;stroke-linecap:round}
+.btn-outline{background:#fff;color:#3d3d3d;border:1px solid #dde8d8}
+.btn-outline:hover{background:#eef7ee;border-color:#b8deba}
+.btn-outline svg{stroke:#3d9142;fill:none;stroke-width:2;stroke-linecap:round}
+.btn-amber{background:#fdf8e1;color:#7a5010;border:1px solid #e6dbb0}
+.btn-amber:hover{background:#faf0c0}
+.btn-amber svg{stroke:#c8880f;fill:none;stroke-width:2;stroke-linecap:round}
+.btn-danger{background:#fdecea;color:#8b1c1c;border:1px solid #f3c2c2}
+.btn-danger:hover{background:#fdd}
+.btn-danger svg{stroke:#b02020;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* SECTIONS */
+.info-section{padding:clamp(40px,7vw,72px) clamp(16px,5vw,52px)}
+.info-section+.info-section{border-top:1px solid #dde8d8}
+.info-section-inner{max-width:960px;margin:0 auto}
+.section-label{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#3d9142;margin-bottom:10px}
+.section-label span{width:18px;height:1.5px;background:#3d9142;border-radius:2px}
+.section-title{font-size:clamp(1.2rem,3vw,1.65rem);font-weight:700;color:#1a1a1a;letter-spacing:-.3px;line-height:1.25;margin-bottom:clamp(24px,4vw,40px)}
+.section-title em{font-style:normal;color:#2d7a32}
+
+/* POR QUE */
+.porque{background:#faf6e8}
+.porque-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.porque-item{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border:1px solid #dde8d8;background:#fff;border-radius:10px;transition:border-color .17s ease,background .17s ease}
+.porque-item:hover{border-color:#7ec487;background:#eef7ee}
+.porque-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.porque-icon svg{width:20px;height:20px}
+.pi-green{background:#e6f4ea}.pi-green svg{stroke:#2d7a32;fill:none;stroke-width:2;stroke-linecap:round}
+.pi-amber{background:#fdf8e1}.pi-amber svg{stroke:#b07d10;fill:none;stroke-width:2;stroke-linecap:round}
+.pi-teal{background:#eaf6ec}.pi-teal svg{stroke:#3d9142;fill:none;stroke-width:2;stroke-linecap:round}
+.pi-purple{background:#fdf8e1}.pi-purple svg{stroke:#9a7f10;fill:none;stroke-width:2;stroke-linecap:round}
+.porque-text h4{font-size:.9rem;font-weight:700;color:#1a1a1a;margin-bottom:3px}
+.porque-text p{font-size:.8rem;color:#8c8c8c;line-height:1.5}
+
+/* COMO */
+.como{background:#f2f7ef}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.steps::before{content:’’;position:absolute;top:20px;left:calc(12.5% + 20px);right:calc(12.5% + 20px);height:1px;background:#b8deba;z-index:0}
+.step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 12px;position:relative;z-index:1}
+.step-num{width:40px;height:40px;border-radius:50%;background:#eef7ee;border:1.5px solid #b8deba;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;color:#2d7a32;margin-bottom:14px;flex-shrink:0}
+.step-icon-wrap{width:48px;height:48px;border-radius:12px;background:#fff;border:1px solid #dde8d8;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.step-icon-wrap svg{width:22px;height:22px;stroke:#3d9142;fill:none;stroke-width:1.8;stroke-linecap:round}
+.step h4{font-size:.83rem;font-weight:700;color:#1a1a1a;margin-bottom:5px;line-height:1.3}
+.step p{font-size:.75rem;color:#8c8c8c;line-height:1.5}
+
+/* RESTRICOES */
+.restricoes{background:#fdf8e1}
+.rest-list{display:flex;flex-direction:column;gap:10px}
+.rest-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid #e6dbb0;background:#fff;border-radius:10px;transition:border-color .17s ease,background .17s ease}
+.rest-item:hover{border-color:#b8deba;background:#eef7ee}
+.rest-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rest-dot svg{width:17px;height:17px}
+.rd-yellow{background:#fdf8e1}.rd-yellow svg{stroke:#a07c08;fill:none;stroke-width:2;stroke-linecap:round}
+.rd-green{background:#eef7ee}.rd-green svg{stroke:#2d7a32;fill:none;stroke-width:2;stroke-linecap:round}
+.rd-orange{background:#faf0c0}.rd-orange svg{stroke:#9a7010;fill:none;stroke-width:2;stroke-linecap:round}
+.rd-red{background:#ddf0df}.rd-red svg{stroke:#2d7a32;fill:none;stroke-width:2;stroke-linecap:round}
+.rd-teal{background:#eef7ee}.rd-teal svg{stroke:#3d9142;fill:none;stroke-width:2;stroke-linecap:round}
+.rest-text{flex:1}
+.rest-text h4{font-size:.9rem;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+.rest-text h4 em{font-style:normal;font-weight:500;color:#8c8c8c}
+.rest-text p{font-size:.77rem;color:#8c8c8c}
+.rest-badge{font-size:.7rem;font-weight:600;color:#2d7a32;background:#eef7ee;border:1px solid #dde8d8;border-radius:20px;padding:2px 10px;white-space:nowrap;flex-shrink:0}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;animation:modalIn .22s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #dde8d8;position:sticky;top:0;background:#fff;z-index:1}
+.modal-head h3{font-size:1rem;font-weight:700;color:#1a1a1a}
+.modal-close{width:30px;height:30px;border:none;background:#edf3ea;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .17s ease}
+.modal-close:hover{background:#ddf0df}
+.modal-close svg{width:14px;height:14px;stroke:#3d3d3d;fill:none;stroke-width:2;stroke-linecap:round}
+.modal-body{padding:22px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.8rem;font-weight:600;color:#3d3d3d;margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1px solid #dde8d8;border-radius:7px;font-family:‘DM Sans’,sans-serif;font-size:.88rem;color:#1a1a1a;background:#fff;transition:border-color .17s ease}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#3d9142}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checkbox-group{display:flex;flex-direction:column;gap:8px}
+.checkbox-item{display:flex;align-items:center;gap:8px;font-size:.85rem;color:#3d3d3d;cursor:pointer}
+.checkbox-item input{accent-color:#3d9142;width:15px;height:15px}
+.modal-footer{padding:16px 22px;border-top:1px solid #dde8d8;display:flex;justify-content:flex-end;gap:10px;background:#edf3ea}
+.form-success{display:none;flex-direction:column;align-items:center;text-align:center;padding:32px 22px;gap:12px}
+.form-success.show{display:flex}
+.success-icon{width:56px;height:56px;border-radius:50%;background:#ddf0df;border:2px solid #b8deba;display:flex;align-items:center;justify-content:center}
+.success-icon svg{width:26px;height:26px;stroke:#2d7a32;fill:none;stroke-width:2.5;stroke-linecap:round}
+.form-success h4{font-size:1rem;font-weight:700;color:#1b4d1e}
+.form-success p{font-size:.85rem;color:#8c8c8c;line-height:1.5}
+
+/* CARDAPIO PAGE */
+.page-header{background:linear-gradient(110deg,#eaf5e6 0%,#f5f9e8 55%,#fdf8e1 100%);border-bottom:1px solid #dde8d8;padding:clamp(20px,4vw,40px) clamp(16px,5vw,52px)}
+.page-header-inner{max-width:960px;margin:0 auto}
+.page-header .back-btn{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:#2d7a32;cursor:pointer;margin-bottom:12px;text-decoration:none;transition:color .17s ease}
+.page-header .back-btn:hover{color:#1b4d1e}
+.page-header .back-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.page-header h2{font-size:clamp(1.2rem,3vw,1.6rem);font-weight:700;color:#1b4d1e;margin-bottom:4px}
+.page-header p{font-size:.88rem;color:#3d3d3d}
+.page-content{max-width:960px;margin:0 auto;padding:clamp(18px,4vw,36px) clamp(12px,5vw,52px) 40px}
+
+/* CARDAPIO SEMANAL */
+.week-tabs{display:flex;gap:6px;margin-bottom:24px;overflow-x:auto;padding-bottom:4px}
+.week-tab{padding:8px 16px;border:1px solid #dde8d8;border-radius:30px;font-size:.82rem;font-weight:600;color:#3d3d3d;background:#fff;cursor:pointer;white-space:nowrap;transition:all .17s ease;flex-shrink:0}
+.week-tab.active{background:#3d9142;color:#fff;border-color:#3d9142}
+.week-tab:hover:not(.active){background:#eef7ee;border-color:#b8deba}
+.meal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.meal-card{background:#fff;border:1px solid #dde8d8;border-radius:10px;overflow:hidden}
+.meal-card-head{padding:12px 16px 10px;background:#eef7ee;border-bottom:1px solid #dde8d8}
+.meal-card-head span{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#3d9142}
+.meal-card-body{padding:14px 16px}
+.meal-card-body h4{font-size:.9rem;font-weight:700;color:#1a1a1a;margin-bottom:6px}
+.meal-card-body p{font-size:.78rem;color:#8c8c8c;line-height:1.5;margin-bottom:10px}
+.meal-tags{display:flex;flex-wrap:wrap;gap:5px}
+.meal-tag{font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:20px;background:#fdf8e1;color:#8a6010;border:1px solid #e6dbb0}
+.meal-tag.green{background:#eef7ee;color:#2d7a32;border-color:#dde8d8}
+.meal-kcal{font-size:.72rem;color:#8c8c8c;margin-top:8px;font-weight:500}
+
+/* RESTAURANTES */
+.restaurant-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.rest-card{background:#fff;border:1px solid #dde8d8;border-radius:10px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;transition:border-color .17s ease,background .17s ease}
+.rest-card:hover{border-color:#7ec487;background:#eef7ee}
+.rest-card-icon{width:44px;height:44px;border-radius:10px;background:#eef7ee;border:1px solid #dde8d8;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rest-card-icon svg{width:22px;height:22px;stroke:#3d9142;fill:none;stroke-width:1.8;stroke-linecap:round}
+.rest-card-info h4{font-size:.9rem;font-weight:700;color:#1a1a1a;margin-bottom:3px}
+.rest-card-info p{font-size:.78rem;color:#8c8c8c;line-height:1.5;margin-bottom:8px}
+.rest-tags{display:flex;flex-wrap:wrap;gap:5px}
+.rest-tag{font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:20px;background:#eef7ee;color:#2d7a32;border:1px solid #dde8d8}
+.stars{font-size:.75rem;color:#c8980f;letter-spacing:1px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;background:#1a1a1a;color:#fff;padding:12px 18px;border-radius:10px;font-size:.84rem;font-weight:500;display:flex;align-items:center;gap:10px;max-width:320px;opacity:0;transform:translateY(10px);transition:opacity .25s ease,transform .25s ease;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast svg{width:16px;height:16px;stroke:#7ec487;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.toast-close{margin-left:auto;cursor:pointer;opacity:.6;background:none;border:none;color:#fff;font-size:1rem;line-height:1}
+
+/* PERFIL */
+.profile-card{background:#fff;border:1px solid #dde8d8;border-radius:14px;padding:24px;margin-bottom:20px}
+.profile-top{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #dde8d8}
+.profile-av{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#fff;flex-shrink:0}
+.profile-meta h3{font-size:1.1rem;font-weight:700;color:#1a1a1a;margin-bottom:3px}
+.profile-meta p{font-size:.83rem;color:#8c8c8c}
+.profile-fields{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.pf-item label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8c8c8c;margin-bottom:4px;display:block}
+.pf-item p{font-size:.88rem;font-weight:600;color:#1a1a1a}
+.pf-item.full{grid-column:1/-1}
+
+/* PAINEL INSTITUCIONAL */
+.inst-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:#fff;border:1px solid #dde8d8;border-radius:10px;padding:18px 20px}
+.stat-card .stat-num{font-size:1.8rem;font-weight:700;color:#2d7a32;line-height:1}
+.stat-card .stat-label{font-size:.78rem;color:#8c8c8c;margin-top:4px}
+
+/* FOOTER */
+footer{text-align:center;padding:28px 16px 22px;font-size:.76rem;color:#8c8c8c;background:#eef7ee;border-top:1px solid #dde8d8;margin-top:0}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeUp .32s ease both}
+.student-row{opacity:0}.student-row.vis{animation:fadeUp .3s ease both;opacity:1}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.nav-desktop{display:none}.hamburger{display:flex}.mobile-menu{display:block}
+.student-row{grid-template-columns:40px 1fr;grid-template-rows:auto auto;gap:10px 12px;padding:14px 16px}
+.s-av{width:40px;height:40px;font-size:.88rem}
+.s-actions{grid-column:1/-1;flex-wrap:wrap;gap:6px}
+.meal-grid{grid-template-columns:1fr}
+.restaurant-grid{grid-template-columns:1fr}
+.inst-stats{grid-template-columns:1fr 1fr}
+.profile-fields{grid-template-columns:1fr}
+.pf-item.full{grid-column:auto}
+}
+@media(max-width:500px){
+:root{–nav:56px}
+main{padding:14px 12px 32px}
+.hero{padding:20px 16px 18px}
+.card-header{padding:11px 14px}
+.student-row{padding:12px 14px}
+.s-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}
+.btn-green{grid-column:1/-1;justify-content:center}
+.btn-outline,.btn-amber{justify-content:center}
+.porque-grid{grid-template-columns:1fr}
+.steps{grid-template-columns:repeat(2,1fr);gap:20px}
+.steps::before{display:none}
+.inst-stats{grid-template-columns:1fr}
+.form-row{grid-template-columns:1fr}
+}
+@media(max-width:340px){
+.s-actions{grid-template-columns:1fr}.btn-green{grid-column:auto}
+.steps{grid-template-columns:1fr}
+}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+
+<nav>
+  <a class="logo" onclick="goPage('home')">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 19C4 19 6 11 15 8C15 8 17 14 9 19" fill="white"/><path d="M9 19C9 19 10 14 13 12" stroke="#a5d6a7" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </div>
+    PRATU
+  </a>
+  <div class="nav-desktop">
+    <a onclick="goPage('home')">Início</a>
+    <a onclick="goPage('cardapio')">Cardápio</a>
+    <a onclick="goPage('restaurantes')">Restaurantes</a>
+    <a onclick="goPage('institucional')">Institucional</a>
+    <div class="nav-sep"></div>
+    <div class="nav-user" onclick="goPage('perfil')">
+      <div class="nav-av"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+      <span>Minha conta</span>
+    </div>
+  </div>
+  <button class="hamburger" id="ham" aria-label="Abrir menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- mobile drawer -->
+
+<div class="mobile-menu" id="mob">
+  <a onclick="goPage('home');toggleMenu(false)">Início</a>
+  <a onclick="goPage('cardapio');toggleMenu(false)">Cardápio</a>
+  <a onclick="goPage('restaurantes');toggleMenu(false)">Restaurantes</a>
+  <a onclick="goPage('institucional');toggleMenu(false)">Institucional</a>
+  <div class="mob-footer">
+    <div class="nav-av" style="width:32px;height:32px"><svg viewBox="0 0 24 24" fill="#3d9142"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+    <span onclick="goPage('perfil');toggleMenu(false)" style="cursor:pointer">Minha conta</span>
+  </div>
+</div>
+
+<!-- PAGE: HOME -->
+
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="hero-copy">
+        <h1>Área da Escola ou Empresa</h1>
+        <p>Acompanhe os alunos, envie mensagens e <strong>atualize informações</strong> nutricionais com facilidade.</p>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-hicon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h6a4 4 0 014 4v12a3 3 0 00-3-3H4V4z"/><path d="M20 4h-6a4 4 0 00-4 4v12a3 3 0 013-3h7V4z"/></svg>
+        </div>
+        <p>Instituição: <strong>Escola Exemplo</strong></p>
+        <div style="margin-left:auto">
+          <button class="btn btn-green" onclick="openModal('modal-cadastro')">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar Aluno
+          </button>
+        </div>
+      </div>
+
+```
+  <!-- João -->
+  <div class="student-row">
+    <div class="s-av av-a">J</div>
+    <div class="s-info">
+      <h3>João</h3>
+      <span class="s-tag"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Alergia a glúten</span>
+    </div>
+    <div class="s-actions">
+      <button class="btn btn-green" onclick="goPage('cardapio')">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+        Ver Cardápio
+      </button>
+      <button class="btn btn-outline" onclick="openModal('modal-restricao','João')">
+        <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        Atualizar Restrição
+      </button>
+      <button class="btn btn-amber" onclick="sendNotification('João')">
+        <svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Enviar aos Responsáveis
+      </button>
+    </div>
+  </div>
+
+  <!-- Maria -->
+  <div class="student-row">
+    <div class="s-av av-b">M</div>
+    <div class="s-info">
+      <h3>Maria</h3>
+      <span class="s-tag"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Intolerância à lactose</span>
+    </div>
+    <div class="s-actions">
+      <button class="btn btn-green" onclick="goPage('cardapio')">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+        Ver Cardápio
+      </button>
+      <button class="btn btn-outline" onclick="openModal('modal-restricao','Maria')">
+        <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        Atualizar Restrição
+      </button>
+      <button class="btn btn-amber" onclick="sendNotification('Maria')">
+        <svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Enviar aos Responsáveis
+      </button>
+    </div>
+  </div>
+
+  <!-- Pedro -->
+  <div class="student-row">
+    <div class="s-av av-c">P</div>
+    <div class="s-info">
+      <h3>Pedro</h3>
+      <span class="s-tag"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>+650 responsáveis vinculados</span>
+    </div>
+    <div class="s-actions">
+      <button class="btn btn-green" onclick="goPage('cardapio')">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+        Ver Cardápio
+      </button>
+      <button class="btn btn-outline" onclick="openModal('modal-restricao','Pedro')">
+        <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        Atualizar Restrição
+      </button>
+      <button class="btn btn-amber" onclick="sendNotification('Pedro')">
+        <svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Enviar aos Responsáveis
+      </button>
+    </div>
+  </div>
+
+</div>
+```
+
+  </main>
+
+  <!-- POR QUE -->
+
+  <section class="info-section porque">
+    <div class="info-section-inner">
+      <div class="section-label"><span></span>Sobre o PRATU</div>
+      <h2 class="section-title">Por que o <em>PRATU</em> é importante?</h2>
+      <div class="porque-grid">
+        <div class="porque-item reveal">
+          <div class="porque-icon pi-green"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <div class="porque-text"><h4>Inclusão alimentar</h4><p>Garantimos que todos participem das refeições com segurança e dignidade.</p></div>
+        </div>
+        <div class="porque-item reveal">
+          <div class="porque-icon pi-amber"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="porque-text"><h4>Segurança para crianças com alergias</h4><p>Cardápios personalizados eliminam o risco de exposição a alérgenos.</p></div>
+        </div>
+        <div class="porque-item reveal">
+          <div class="porque-icon pi-teal"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="porque-text"><h4>Integração social nas refeições</h4><p>Nenhum aluno fica de fora — todos compartilham o mesmo momento.</p></div>
+        </div>
+        <div class="porque-item reveal">
+          <div class="porque-icon pi-purple"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div class="porque-text"><h4>Apoio para escolas e empresas</h4><p>Gestão nutricional centralizada, simples e em conformidade com a legislação.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+
+  <section class="info-section como">
+    <div class="info-section-inner">
+      <div class="section-label"><span></span>Processo</div>
+      <h2 class="section-title">Como o <em>PRATU</em> Funciona</h2>
+      <div class="steps">
+        <div class="step reveal"><div class="step-num">1</div><div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><h4>Escola ou empresa contrata o PRATU</h4><p>Cadastro rápido da instituição.</p></div>
+        <div class="step reveal"><div class="step-num">2</div><div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h4>Cadastra aluno com restrição alimentar</h4><p>Informações registradas com segurança.</p></div>
+        <div class="step reveal"><div class="step-num">3</div><div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg></div><h4>Nutricionistas criam cardápio exclusivo</h4><p>Refeições adaptadas a cada necessidade.</p></div>
+        <div class="step reveal"><div class="step-num">4</div><div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div><h4>Responsáveis recebem atualizações</h4><p>Notificações automáticas em tempo real.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESTRICOES -->
+
+  <section class="info-section restricoes">
+    <div class="info-section-inner">
+      <div class="section-label"><span></span>Restrições</div>
+      <h2 class="section-title">Tipos de <em>Restrições</em> Atendidas</h2>
+      <div class="rest-list">
+        <div class="rest-item reveal"><div class="rest-dot rd-yellow"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div><div class="rest-text"><h4>Intolerância à lactose</h4><p>Alternativas sem lactose em todas as refeições.</p></div><span class="rest-badge">Comum</span></div>
+        <div class="rest-item reveal"><div class="rest-dot rd-green"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div class="rest-text"><h4>Alergia a glúten <em>(celíacos)</em></h4><p>Cardápios 100% livres de trigo, cevada e centeio.</p></div><span class="rest-badge">Comum</span></div>
+        <div class="rest-item reveal"><div class="rest-dot rd-orange"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="rest-text"><h4>Alergia a amendoim</h4><p>Controle rigoroso de contaminação cruzada.</p></div><span class="rest-badge">Alta atenção</span></div>
+        <div class="rest-item reveal"><div class="rest-dot rd-red"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><div class="rest-text"><h4>Alergia a ovo</h4><p>Substituições nutricionalmente equivalentes disponíveis.</p></div><span class="rest-badge">Moderado</span></div>
+        <div class="rest-item reveal"><div class="rest-dot rd-teal"><svg viewBox="0 0 24 24"><path d="M5 20C5 20 7 10 17 7C17 7 19 15 9 20" stroke-width="1.8"/><path d="M9 20C9 20 11 14 14 12"/></svg></div><div class="rest-text"><h4>Dietas específicas <em>(vegetariana/vegana)</em></h4><p>Refeições completas sem produtos de origem animal.</p></div><span class="rest-badge">Personalizado</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 PRATU — Nutrição escolar inteligente</footer>
+</div>
+
+<!-- PAGE: CARDAPIO -->
+
+<div class="page" id="page-cardapio">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <a class="back-btn" onclick="goPage('home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</a>
+      <h2>Cardápio Semanal Personalizado</h2>
+      <p>João — Sem glúten · Semana de 07 a 11 de abril de 2026</p>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="week-tabs" id="weekTabs">
+      <button class="week-tab active" onclick="selectDay(this,'seg')">Segunda</button>
+      <button class="week-tab" onclick="selectDay(this,'ter')">Terça</button>
+      <button class="week-tab" onclick="selectDay(this,'qua')">Quarta</button>
+      <button class="week-tab" onclick="selectDay(this,'qui')">Quinta</button>
+      <button class="week-tab" onclick="selectDay(this,'sex')">Sexta</button>
+    </div>
+    <div id="mealContent"></div>
+  </div>
+  <footer>© 2026 PRATU — Nutrição escolar inteligente</footer>
+</div>
+
+<!-- PAGE: RESTAURANTES -->
+
+<div class="page" id="page-restaurantes">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <a class="back-btn" onclick="goPage('home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</a>
+      <h2>Restaurantes Indicados</h2>
+      <p>Opções seguras e adequadas para você comer fora de casa</p>
+    </div>
+  </div>
+  <div class="page-content">
+    <div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="week-tab active" onclick="filterRest(this,'todos')">Todos</button>
+      <button class="week-tab" onclick="filterRest(this,'sem-gluten')">Sem glúten</button>
+      <button class="week-tab" onclick="filterRest(this,'sem-lactose')">Sem lactose</button>
+      <button class="week-tab" onclick="filterRest(this,'vegano')">Vegano</button>
+    </div>
+    <div class="restaurant-grid" id="restGrid"></div>
+  </div>
+  <footer>© 2026 PRATU — Nutrição escolar inteligente</footer>
+</div>
+
+<!-- PAGE: INSTITUCIONAL -->
+
+<div class="page" id="page-institucional">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <a class="back-btn" onclick="goPage('home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</a>
+      <h2>Painel Institucional</h2>
+      <p>Escola Exemplo — Gestão nutricional centralizada</p>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="inst-stats">
+      <div class="stat-card"><div class="stat-num">47</div><div class="stat-label">Alunos cadastrados</div></div>
+      <div class="stat-card"><div class="stat-num">12</div><div class="stat-label">Restrições ativas</div></div>
+      <div class="stat-card"><div class="stat-num">98%</div><div class="stat-label">Cardápios entregues</div></div>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header">
+        <div class="card-hicon"><svg viewBox="0 0 24 24"><path d="M4 4h6a4 4 0 014 4v12a3 3 0 00-3-3H4V4z"/><path d="M20 4h-6a4 4 0 00-4 4v12a3 3 0 013-3h7V4z"/></svg></div>
+        <p><strong>Alunos com restrições ativas</strong></p>
+        <div style="margin-left:auto">
+          <button class="btn btn-green" onclick="openModal('modal-cadastro')">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo Cadastro
+          </button>
+        </div>
+      </div>
+      <div class="student-row vis"><div class="s-av av-a">J</div><div class="s-info"><h3>João</h3><span class="s-tag">Alergia a glúten</span></div><div class="s-actions"><button class="btn btn-outline" onclick="openModal('modal-restricao','João')">Editar Restrição</button><button class="btn btn-amber" onclick="sendNotification('João')">Notificar</button></div></div>
+      <div class="student-row vis"><div class="s-av av-b">M</div><div class="s-info"><h3>Maria</h3><span class="s-tag">Intolerância à lactose</span></div><div class="s-actions"><button class="btn btn-outline" onclick="openModal('modal-restricao','Maria')">Editar Restrição</button><button class="btn btn-amber" onclick="sendNotification('Maria')">Notificar</button></div></div>
+      <div class="student-row vis"><div class="s-av av-c">P</div><div class="s-info"><h3>Pedro</h3><span class="s-tag">Dieta vegetariana</span></div><div class="s-actions"><button class="btn btn-outline" onclick="openModal('modal-restricao','Pedro')">Editar Restrição</button><button class="btn btn-amber" onclick="sendNotification('Pedro')">Notificar</button></div></div>
+    </div>
+    <div style="text-align:center;padding:16px 0">
+      <button class="btn btn-green" onclick="openModal('modal-contrato')" style="padding:12px 28px;font-size:.92rem">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+        Solicitar Consultoria Nutricional
+      </button>
+    </div>
+  </div>
+  <footer>© 2026 PRATU — Nutrição escolar inteligente</footer>
+</div>
+
+<!-- PAGE: PERFIL -->
+
+<div class="page" id="page-perfil">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <a class="back-btn" onclick="goPage('home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</a>
+      <h2>Minha Conta</h2>
+      <p>Gerencie suas informações e restrições alimentares</p>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="profile-card">
+      <div class="profile-top">
+        <div class="profile-av av-a" style="width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#fff;background:#4a9e6b;flex-shrink:0">J</div>
+        <div class="profile-meta">
+          <h3>João Silva</h3>
+          <p>Cadastrado desde março de 2025 · Escola Exemplo</p>
+        </div>
+        <button class="btn btn-outline" onclick="openModal('modal-perfil')" style="margin-left:auto;flex-shrink:0">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Editar perfil
+        </button>
+      </div>
+      <div class="profile-fields">
+        <div class="pf-item"><label>Data de nascimento</label><p>12 de março de 2015</p></div>
+        <div class="pf-item"><label>Responsável</label><p>Ana Silva (mãe)</p></div>
+        <div class="pf-item"><label>Contato responsável</label><p>(11) 99123-4567</p></div>
+        <div class="pf-item"><label>Instituição</label><p>Escola Exemplo — Turma 4ºA</p></div>
+        <div class="pf-item full"><label>Restrições alimentares ativas</label><p>Alergia a glúten (celíaco confirmado) · Intolerância leve a corantes artificiais</p></div>
+        <div class="pf-item full"><label>Preferências alimentares</label><p>Prefere frutas cítricas · Não gosta de beterraba · Aprecia proteínas magras</p></div>
+        <div class="pf-item full"><label>Observações da nutricionista</label><p>Manter cálcio e vitamina D em dia. Reforçar fibras com aveia sem glúten. Hidratação mínima de 1,5L/dia.</p></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-green" onclick="goPage('cardapio')">Ver meu cardápio semanal</button>
+      <button class="btn btn-outline" onclick="openModal('modal-restricao','João')">Atualizar restrições</button>
+      <button class="btn btn-amber" onclick="goPage('restaurantes')">Ver restaurantes indicados</button>
+    </div>
+  </div>
+  <footer>© 2026 PRATU — Nutrição escolar inteligente</footer>
+</div>
+
+<!-- MODAIS -->
+
+<!-- Modal: Cadastrar Aluno -->
+
+<div class="modal-overlay" id="modal-cadastro">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Cadastrar Novo Aluno</h3>
+      <button class="modal-close" onclick="closeModal('modal-cadastro')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div id="modal-cadastro-body">
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group"><label>Nome completo</label><input type="text" placeholder="Ex: Lucas Ferreira"/></div>
+          <div class="form-group"><label>Data de nascimento</label><input type="date"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Turma / Setor</label><input type="text" placeholder="Ex: 4ºA / RH"/></div>
+          <div class="form-group"><label>Responsável</label><input type="text" placeholder="Nome do responsável"/></div>
+        </div>
+        <div class="form-group"><label>Contato do responsável</label><input type="text" placeholder="(11) 99999-9999"/></div>
+        <div class="form-group">
+          <label>Restrições alimentares</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox"/> Alergia a glúten (celíaco)</label>
+            <label class="checkbox-item"><input type="checkbox"/> Intolerância à lactose</label>
+            <label class="checkbox-item"><input type="checkbox"/> Alergia a amendoim</label>
+            <label class="checkbox-item"><input type="checkbox"/> Alergia a ovo</label>
+            <label class="checkbox-item"><input type="checkbox"/> Dieta vegetariana</label>
+            <label class="checkbox-item"><input type="checkbox"/> Dieta vegana</label>
+          </div>
+        </div>
+        <div class="form-group"><label>Outras restrições ou observações</label><textarea placeholder="Descreva outras necessidades específicas..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-cadastro')">Cancelar</button>
+        <button class="btn btn-green" onclick="submitForm('modal-cadastro','Aluno cadastrado com sucesso!','O cardápio personalizado será criado em até 24h.')">Cadastrar Aluno</button>
+      </div>
+    </div>
+    <div class="form-success" id="modal-cadastro-success">
+      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h4>Aluno cadastrado com sucesso!</h4>
+      <p>O cardápio personalizado será preparado pela equipe nutricional em até 24 horas.</p>
+      <button class="btn btn-green" onclick="closeModal('modal-cadastro')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Atualizar Restrição -->
+
+<div class="modal-overlay" id="modal-restricao">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-restricao-title">Atualizar Restrição</h3>
+      <button class="modal-close" onclick="closeModal('modal-restricao')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div id="modal-restricao-body">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Restrições alimentares ativas</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" checked/> Alergia a glúten (celíaco)</label>
+            <label class="checkbox-item"><input type="checkbox"/> Intolerância à lactose</label>
+            <label class="checkbox-item"><input type="checkbox"/> Alergia a amendoim</label>
+            <label class="checkbox-item"><input type="checkbox"/> Alergia a ovo</label>
+            <label class="checkbox-item"><input type="checkbox"/> Dieta vegetariana</label>
+            <label class="checkbox-item"><input type="checkbox"/> Dieta vegana</label>
+          </div>
+        </div>
+        <div class="form-group"><label>Nível de severidade</label>
+          <select><option>Leve — preferência alimentar</option><option selected>Moderado — intolerância</option><option>Severo — alergia confirmada</option><option>Crítico — risco de anafilaxia</option></select>
+        </div>
+        <div class="form-group"><label>Observações adicionais</label><textarea placeholder="Informe sintomas, medicamentos ou outras orientações médicas...">Celíaco confirmado por biopsia. Evitar contaminação cruzada.</textarea></div>
+        <div class="form-group"><label>Data do último diagnóstico</label><input type="date" value="2024-08-15"/></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-restricao')">Cancelar</button>
+        <button class="btn btn-green" onclick="submitForm('modal-restricao','Restrição atualizada!','O cardápio será ajustado automaticamente.')">Salvar Alterações</button>
+      </div>
+    </div>
+    <div class="form-success" id="modal-restricao-success">
+      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h4>Restrição atualizada!</h4>
+      <p>O cardápio semanal será ajustado automaticamente pela equipe nutricional.</p>
+      <button class="btn btn-green" onclick="closeModal('modal-restricao')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Contrato Institucional -->
+
+<div class="modal-overlay" id="modal-contrato">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Solicitar Consultoria PRATU</h3>
+      <button class="modal-close" onclick="closeModal('modal-contrato')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div id="modal-contrato-body">
+      <div class="modal-body">
+        <div class="form-group"><label>Nome da instituição</label><input type="text" placeholder="Ex: Escola Municipal João XXIII"/></div>
+        <div class="form-row">
+          <div class="form-group"><label>Tipo de instituição</label>
+            <select><option>Escola pública</option><option>Escola privada</option><option>Empresa</option><option>Creche</option><option>Outro</option></select>
+          </div>
+          <div class="form-group"><label>Nº estimado de pessoas</label><input type="number" placeholder="Ex: 250"/></div>
+        </div>
+        <div class="form-group"><label>Nome do responsável</label><input type="text" placeholder="Nome completo"/></div>
+        <div class="form-group"><label>E-mail para contato</label><input type="email" placeholder="contato@instituicao.com.br"/></div>
+        <div class="form-group"><label>Plano de interesse</label>
+          <select><option>Básico — cardápios digitais</option><option>Padrão — cardápios + marmitas</option><option>Completo — cardápios + marmitas + consultoria presencial</option></select>
+        </div>
+        <div class="form-group"><label>Mensagem ou necessidades específicas</label><textarea placeholder="Descreva o contexto da sua instituição..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-contrato')">Cancelar</button>
+        <button class="btn btn-green" onclick="submitForm('modal-contrato','Solicitação enviada!','Nossa equipe entrará em contato em até 2 dias úteis.')">Enviar Solicitação</button>
+      </div>
+    </div>
+    <div class="form-success" id="modal-contrato-success">
+      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h4>Solicitação enviada com sucesso!</h4>
+      <p>Nossa equipe de nutricionistas entrará em contato em até 2 dias úteis para apresentar a proposta personalizada.</p>
+      <button class="btn btn-green" onclick="closeModal('modal-contrato')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Editar Perfil -->
+
+<div class="modal-overlay" id="modal-perfil">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Editar Perfil</h3>
+      <button class="modal-close" onclick="closeModal('modal-perfil')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div id="modal-perfil-body">
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group"><label>Nome completo</label><input type="text" value="João Silva"/></div>
+          <div class="form-group"><label>Data de nascimento</label><input type="date" value="2015-03-12"/></div>
+        </div>
+        <div class="form-group"><label>Nome do responsável</label><input type="text" value="Ana Silva"/></div>
+        <div class="form-group"><label>Contato do responsável</label><input type="text" value="(11) 99123-4567"/></div>
+        <div class="form-group"><label>Preferências alimentares</label><textarea>Prefere frutas cítricas · Não gosta de beterraba · Aprecia proteínas magras</textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-perfil')">Cancelar</button>
+        <button class="btn btn-green" onclick="submitForm('modal-perfil','Perfil atualizado!','Suas informações foram salvas.')">Salvar</button>
+      </div>
+    </div>
+    <div class="form-success" id="modal-perfil-success">
+      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h4>Perfil atualizado!</h4>
+      <p>Suas informações foram salvas com sucesso.</p>
+      <button class="btn btn-green" onclick="closeModal('modal-perfil')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg"></span>
+  <button class="toast-close" onclick="hideToast()">×</button>
+</div>
+
+<script>
+// DATA
+const meals = {
+  seg:[
+    {label:'Café da manhã',name:'Mingau de aveia sem glúten',desc:'Com banana, mel e canela. Rico em fibras e energia para o início do dia.',tags:['Sem glúten','Sem lactose'],kcal:'320 kcal'},
+    {label:'Almoço',name:'Frango grelhado com arroz e salada',desc:'Peito de frango temperado, arroz integral e mix de folhas com azeite.',tags:['Sem glúten','Alta proteína'],kcal:'580 kcal'},
+    {label:'Lanche da tarde',name:'Fruta e iogurte sem lactose',desc:'Maçã fatiada com iogurte de coco natural e granola sem glúten.',tags:['Sem glúten','Sem lactose'],kcal:'210 kcal'},
+  ],
+  ter:[
+    {label:'Café da manhã',name:'Tapioca com ovo mexido',desc:'Tapioca crocante recheada com ovo mexido temperado e cebolinha.',tags:['Sem glúten'],kcal:'290 kcal'},
+    {label:'Almoço',name:'Peixe assado com mandioca',desc:'Tilápia ao forno com limão, mandioca cozida e feijão verde.',tags:['Sem glúten','Omega 3'],kcal:'520 kcal'},
+    {label:'Lanche da tarde',name:'Vitamina de frutas',desc:'Mamão, banana e laranja batidos com leite vegetal de amêndoas.',tags:['Sem glúten','Vegano'],kcal:'180 kcal'},
+  ],
+  qua:[
+    {label:'Café da manhã',name:'Pão sem glúten com abacate',desc:'Fatias de pão de arroz tostadas com pasta de abacate e azeite extra virgem.',tags:['Sem glúten','Sem lactose'],kcal:'310 kcal'},
+    {label:'Almoço',name:'Carne moída com purê de batata',desc:'Carne moída refogada com legumes, purê de batata com azeite.',tags:['Sem glúten'],kcal:'610 kcal'},
+    {label:'Lanche da tarde',name:'Castanhas e fruta seca',desc:'Mix de castanhas do Pará, uva passa e damasco seco.',tags:['Sem glúten','Sem lactose'],kcal:'240 kcal'},
+  ],
+  qui:[
+    {label:'Café da manhã',name:'Panqueca de banana e ovo',desc:'Panqueca natural feita com banana amassada e ovos, sem farinha.',tags:['Sem glúten','Sem lactose'],kcal:'280 kcal'},
+    {label:'Almoço',name:'Frango ao curry com arroz',desc:'Frango em molho de curry suave, arroz branco e brócolis no vapor.',tags:['Sem glúten'],kcal:'560 kcal'},
+    {label:'Lanche da tarde',name:'Smoothie verde',desc:'Espinafre, pepino, maçã verde e limão batidos com água de coco.',tags:['Sem glúten','Vegano'],kcal:'120 kcal'},
+  ],
+  sex:[
+    {label:'Café da manhã',name:'Crepioca com queijo vegetal',desc:'Crepioca de tapioca e ovo com recheio de pasta de amendoim.',tags:['Sem glúten'],kcal:'330 kcal'},
+    {label:'Almoço',name:'Marmita especial de sexta',desc:'Bisteca suína grelhada, feijão-tropeiro sem farinha, couve refogada.',tags:['Sem glúten','Alta proteína'],kcal:'640 kcal'},
+    {label:'Lanche da tarde',name:'Gelatina com frutas',desc:'Gelatina natural de agar-agar com pedaços de morango e kiwi.',tags:['Sem glúten','Sem lactose'],kcal:'90 kcal'},
+  ]
+};
+
+const restaurants = [
+  {name:'Verde Mesa',desc:'Restaurante especializado em alimentação funcional e sem glúten.',tags:['sem-gluten','sem-lactose'],cats:['Sem glúten','Sem lactose'],stars:'★★★★★',addr:'R. das Acácias, 42 — Vila Nova'},
+  {name:'Nutri Bowl',desc:'Bowls saudáveis com opções 100% veganas e sem alérgenos.',tags:['vegano','sem-gluten','sem-lactose'],cats:['Vegano','Sem glúten'],stars:'★★★★☆',addr:'Av. Bela Vista, 118 — Centro'},
+  {name:'Casa Celíaca',desc:'Ambiente 100% livre de glúten — contaminação cruzada zero.',tags:['sem-gluten'],cats:['Sem glúten'],stars:'★★★★★',addr:'R. São Bento, 7 — Jardins'},
+  {name:'Raízes & Grãos',desc:'Comida natural com foco em ingredientes orgânicos e sazonais.',tags:['vegano','sem-lactose','sem-gluten'],cats:['Vegano','Sem lactose'],stars:'★★★★☆',addr:'Rua das Flores, 230 — Moema'},
+  {name:'Sabor Natural',desc:'Buffet por peso com identificação completa de alérgenos.',tags:['sem-lactose','sem-gluten'],cats:['Sem glúten','Sem lactose'],stars:'★★★☆☆',addr:'R. Augusta, 560 — Consolação'},
+  {name:'VeganTaste',desc:'Culinária vegana gourmet com cardápio rotativo semanal.',tags:['vegano'],cats:['Vegano'],stars:'★★★★☆',addr:'Av. Paulista, 800 — Bela Vista'},
+];
+
+// PAGES
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='cardapio') renderMeals('seg');
+  if(id==='restaurantes') renderRestaurants('todos');
+  revealOnLoad();
+}
+
+// MEALS
+function renderMeals(day){
+  const d = meals[day];
+  document.getElementById('mealContent').innerHTML = `
+    <div class="meal-grid">${d.map(m=>`
+      <div class="meal-card">
+        <div class="meal-card-head"><span>${m.label}</span></div>
+        <div class="meal-card-body">
+          <h4>${m.name}</h4>
+          <p>${m.desc}</p>
+          <div class="meal-tags">${m.tags.map(t=>`<span class="meal-tag ${t.includes('glúten')||t.includes('lactose')||t.includes('Vegano')?'green':''}">${t}</span>`).join('')}</div>
+          <div class="meal-kcal">⚡ ${m.kcal}</div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+}
+
+function selectDay(btn, day){
+  document.querySelectorAll('.week-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderMeals(day);
+}
+
+// RESTAURANTS
+function renderRestaurants(filter){
+  const list = filter==='todos' ? restaurants : restaurants.filter(r=>r.tags.includes(filter));
+  document.getElementById('restGrid').innerHTML = list.map(r=>`
+    <div class="rest-card">
+      <div class="rest-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <div class="rest-card-info">
+        <h4>${r.name} <span class="stars">${r.stars}</span></h4>
+        <p>${r.desc}</p>
+        <p style="font-size:.74rem;color:#8c8c8c;margin-bottom:6px">📍 ${r.addr}</p>
+        <div class="rest-tags">${r.cats.map(c=>`<span class="rest-tag">${c}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function filterRest(btn, filter){
+  document.querySelectorAll('.week-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderRestaurants(filter);
+}
+
+// MODAL
+function openModal(id, name){
+  document.getElementById(id).classList.add('open');
+  if(name && id==='modal-restricao') document.getElementById('modal-restricao-title').textContent = 'Restrição de '+name;
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow='';
+  const body = document.getElementById(id+'-body');
+  const succ = document.getElementById(id+'-success');
+  if(body) body.style.display='';
+  if(succ) succ.classList.remove('show');
+}
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o) closeModal(o.id); });
+});
+
+// FORM SUBMIT
+function submitForm(modalId, title, desc){
+  const body = document.getElementById(modalId+'-body');
+  const succ = document.getElementById(modalId+'-success');
+  if(!body||!succ) return;
+  body.style.display='none';
+  succ.classList.add('show');
+  succ.querySelector('h4').textContent = title;
+  succ.querySelector('p').textContent = desc;
+  showToast(title);
+}
+
+// NOTIFICATION
+function sendNotification(name){
+  showToast('Atualização enviada para os responsáveis de '+name+'!');
+}
+
+// TOAST
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>hideToast(), 3500);
+}
+function hideToast(){ document.getElementById('toast').classList.remove('show'); }
+
+// HAMBURGER
+const ham = document.getElementById('ham');
+const mob = document.getElementById('mob');
+function toggleMenu(force){
+  const open = typeof force==='boolean' ? force : !ham.classList.contains('open');
+  ham.classList.toggle('open',open);
+  mob.classList.toggle('open',open);
+  ham.setAttribute('aria-expanded',open);
+}
+ham.addEventListener('click',e=>{e.stopPropagation();toggleMenu();});
+document.addEventListener('click',e=>{ if(!ham.contains(e.target)&&!mob.contains(e.target)) toggleMenu(false); });
+
+// REVEAL
+function revealOnLoad(){
+  document.querySelectorAll('.student-row').forEach((r,i)=>
+    setTimeout(()=>r.classList.add('vis'), 180+i*80));
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('vis'),60); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+}
+revealOnLoad();
+</script>
+
+</body>
+</html>
